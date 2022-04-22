@@ -1,10 +1,16 @@
-FROM rocker/tidyverse
-MAINTAINER Marc A. Suchard <msuchard@ucla.edu>
+# syntax=docker/dockerfile:1
+FROM rocker/tidyverse:4.1.3
+MAINTAINER Lee Evans <evans@ohdsi.org>
 
-RUN apt-get update && apt-get install -y python-dev openjdk-8-jdk liblzma-dev libbz2-dev \
+ENV DATABASECONNECTOR_JAR_FOLDER="/opt/hades/jdbc_drivers"
+
+RUN apt-get update && apt-get install -y python-dev openjdk-11-jdk liblzma-dev libbz2-dev \
 && R CMD javareconf
 
-## Install Rserve
+RUN --mount=type=secret,id=GITHUB_PAT \
+	cp /usr/local/lib/R/etc/Renviron /tmp/Renviron && echo "GITHUB_PAT=$(cat /run/secrets/GITHUB_PAT)" >> /usr/local/lib/R/etc/Renviron
+
+# Install Rserve
 RUN install2.r \
 	Rserve \
 	RSclient \
@@ -14,22 +20,23 @@ RUN install2.r \
 	remotes \
 && rm -rf /tmp/download_packages/ /tmp/*.rds
 
-## Install OHDSI R packages
-RUN installGithub.r \
-	OHDSI/SqlRender \
-	OHDSI/DatabaseConnector \
-	OHDSI/OhdsiRTools \
-	OHDSI/Achilles \
-	OHDSI/Cyclops \
-	OHDSI/FeatureExtraction \
-	OHDSI/BigKnn \
-	OHDSI/PatientLevelPrediction \
-	OHDSI/CohortMethod \
-	OHDSI/PublicOracle \
-	hadley/xml2 \
-	cloudyr/aws.s3 \
-	OHDSI/OhdsiSharing \
-&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+# install OHDSI HADES R packages
+RUN R -e "remotes::install_github(repo = 'OHDSI/Hades', upgrade = 'always')"
+
+# install jdbc drivers for database access using OHDSI DatabaseConnector
+RUN R <<EOF
+library(DatabaseConnector);
+downloadJdbcDrivers('postgresql');
+downloadJdbcDrivers('redshift');
+downloadJdbcDrivers('sql server');
+downloadJdbcDrivers('oracle');
+downloadJdbcDrivers('spark');
+EOF
+
+# install OHDSI Achilles R package
+RUN R -e "remotes::install_github(repo = 'OHDSI/Achilles', upgrade = 'always')"
+
+RUN cp /tmp/Renviron /usr/local/lib/R/etc/Renviron
 
 COPY Rserv.conf /etc/Rserv.conf
 COPY startRserve.R /usr/local/bin/startRserve.R
