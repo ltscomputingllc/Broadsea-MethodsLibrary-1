@@ -1,0 +1,65 @@
+# Build Docker container
+
+name: CI
+
+on:
+  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
+
+env:
+  
+  DOCKER_IMAGE_REPO_NAME: OHDSI/broadsea-methodslibrary
+  DOCKER_IMAGE_LABEL_URL: https://github.com/OHDSI/Broadsea-methodslibrary
+  DOCKER_IMAGE_LABEL_DESCRIPTION: RStudio with OHDSI HADES and Achilles
+  DOCKER_IMAGE_LABEL_MAINTAINER: Lee Evans - evans@ohdsi.org
+  DOCKER_IMAGE_LABEL_AUTHORS: Lee Evans - evans@ohdsi.org
+  DOCKER_IMAGE_LABEL_VENDOR: OHDSI
+  DOCKER_IMAGE_LABEL_LICENSES: Apache-2.0
+  
+  GITHUB_PAT: ${{ secrets.GH_TOKEN }}
+  
+jobs:
+
+  build:
+  
+    runs-on: ubuntu-latest
+          
+    steps:
+      
+      - name: Checkout GitHub repo code
+        uses: actions/checkout@v3
+                   
+      - name: Set up Docker build environment
+        uses: docker/setup-qemu-action@v1
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+            
+      - name: Build and push container image
+        uses: docker/build-push-action@v2
+        with:
+          secrets: "GITHUB_PAT=${{ secrets.GH_TOKEN }}"
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          push: true
+          tags: ${{ env.DOCKER_IMAGE_REPO_NAME }}:latest,${{ env.DOCKER_IMAGE_REPO_NAME }}:${{ env.LATEST_SHA }}
+          labels: |
+            maintainer=${{ env.DOCKER_IMAGE_LABEL_MAINTAINER }}
+            org.opencontainers.image.description=${{ env.DOCKER_IMAGE_LABEL_DESCRIPTION }}
+            org.opencontainers.image.authors=${{ env.DOCKER_IMAGE_LABEL_AUTHORS }}
+            org.opencontainers.image.vendor=${{ env.DOCKER_IMAGE_LABEL_VENDOR }}
+            org.opencontainers.image.url=${{ env.DOCKER_IMAGE_LABEL_URL }}
+            org.opencontainers.image.licenses=${{ env.DOCKER_IMAGE_LABEL_LICENSES }}
