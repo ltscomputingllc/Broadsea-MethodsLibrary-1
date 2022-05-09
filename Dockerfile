@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM rocker/tidyverse:4.1.3
+FROM rocker/tidyverse:latest
 MAINTAINER Lee Evans <evans@ohdsi.org>
 
 ENV DATABASECONNECTOR_JAR_FOLDER="/opt/hades/jdbc_drivers"
