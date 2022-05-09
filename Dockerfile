@@ -20,8 +20,9 @@ RUN install2.r \
 	remotes \
 && rm -rf /tmp/download_packages/ /tmp/*.rds
 
-# install OHDSI HADES R packages
+# install OHDSI R packages that are not part of HADES
 RUN R -e "remotes::install_github(repo = 'OHDSI/Hades', upgrade = 'always')"
+RUN R -e "remotes::install_github(repo = 'OHDSI/DataQualityDashboard', upgrade = 'always')"
 
 # install jdbc drivers for database access using OHDSI DatabaseConnector
 RUN R <<EOF
