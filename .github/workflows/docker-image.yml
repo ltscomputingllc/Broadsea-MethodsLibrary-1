@@ -7,7 +7,8 @@ on:
 
 env:
   
-  DOCKER_IMAGE_REPO_NAME: OHDSI/broadsea-methodslibrary
+#  DOCKER_IMAGE_REPO_NAME: OHDSI/broadsea-methodslibrary
+  DOCKER_IMAGE_REPO_NAME: levansltscomputingllc/broadsea-hades
   DOCKER_IMAGE_LABEL_URL: https://github.com/OHDSI/Broadsea-methodslibrary
   DOCKER_IMAGE_LABEL_DESCRIPTION: RStudio with OHDSI HADES and Achilles
   DOCKER_IMAGE_LABEL_MAINTAINER: Lee Evans - evans@ohdsi.org
