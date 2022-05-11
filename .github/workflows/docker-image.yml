@@ -1,4 +1,4 @@
-# Build OHDSI HADES Docker container
+# Build OHDSI BROADSEA HADES Docker container
 
 name: CI
 
