@@ -1,4 +1,4 @@
-# Build Docker container
+# Build OHDSI HADES Docker container
 
 name: CI
 
