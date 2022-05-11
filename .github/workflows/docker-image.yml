@@ -25,7 +25,15 @@ jobs:
     runs-on: ubuntu-latest
           
     steps:
-      
+  
+      - name: Get source repo R package version number from DESCRIPTION file
+        run: |
+          echo "R_PACKAGE_VERSION="$(curl -s -S https://api.github.com/repos/OHDSI/HADES/contents/DESCRIPTION | jq -r ".content" | base64 --decode | grep Version| cut -d' ' -f2) >> $GITHUB_ENV
+      - name: Display new version number
+        if: ${{ env.R_PACKAGE_VERSION != '' }}
+        run: |
+          echo "${{ env.R_PACKAGE_VERSION }}"
+  
       - name: Checkout GitHub repo code
         uses: actions/checkout@v3
                    
@@ -56,7 +64,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           push: true
-          tags: ${{ env.DOCKER_IMAGE_REPO_NAME }}:latest,${{ env.DOCKER_IMAGE_REPO_NAME }}:${{ env.LATEST_SHA }}
+          tags: ${{ env.DOCKER_IMAGE_REPO_NAME }}:latest,${{ env.DOCKER_IMAGE_REPO_NAME }}:${{ env.R_PACKAGE_VERSION }}
           labels: |
             maintainer=${{ env.DOCKER_IMAGE_LABEL_MAINTAINER }}
             org.opencontainers.image.description=${{ env.DOCKER_IMAGE_LABEL_DESCRIPTION }}
