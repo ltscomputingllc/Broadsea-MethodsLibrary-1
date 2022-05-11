@@ -8,13 +8,13 @@ on:
 env:
   
   DOCKER_IMAGE_REPO_NAME: levansltscomputingllc/broadsea-hades
-  DOCKER_IMAGE_LABEL_URL: https://github.com/OHDSI/Broadsea-methodslibrary
+  DOCKER_IMAGE_LABEL_URL: https://github.com/OHDSI/Broadsea-methodslibrary/build-broadsea-hades
   DOCKER_IMAGE_LABEL_DESCRIPTION: RStudio Server with OHDSI HADES R packages
   DOCKER_IMAGE_LABEL_MAINTAINER: Lee Evans - evans@ohdsi.org
   DOCKER_IMAGE_LABEL_AUTHORS: OHDSI Community
   DOCKER_IMAGE_LABEL_VENDOR: OHDSI Community
   DOCKER_IMAGE_LABEL_LICENSES: Apache-2.0
-  DOCKERFILE: Dockerfile-build-broadsea-hades
+  BUILD_CONTEXT_DIRECTORY: build-broadsea-hades
   
   GITHUB_PAT: ${{ secrets.GH_TOKEN }}
   
@@ -35,8 +35,8 @@ jobs:
         run: |
           echo "${{ env.R_PACKAGE_VERSION }}"
   
-      - name: Checkout GitHub repo code
-        uses: actions/checkout@v3
+#      - name: Checkout GitHub repo code
+#        uses: actions/checkout@v3
                    
       - name: Set up Docker build environment
         uses: docker/setup-qemu-action@v1
@@ -65,7 +65,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           push: true
-          file: ${{ env.DOCKERFILE }}
+          context: "{{defaultContext}}:${{ env.BUILD_CONTEXT_DIRECTORY }}"
           tags: ${{ env.DOCKER_IMAGE_REPO_NAME }}:latest,${{ env.DOCKER_IMAGE_REPO_NAME }}:${{ env.R_PACKAGE_VERSION }}
           labels: |
             maintainer=${{ env.DOCKER_IMAGE_LABEL_MAINTAINER }}
