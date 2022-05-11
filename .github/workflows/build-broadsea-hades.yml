@@ -14,7 +14,7 @@ env:
   DOCKER_IMAGE_LABEL_AUTHORS: OHDSI Community
   DOCKER_IMAGE_LABEL_VENDOR: OHDSI Community
   DOCKER_IMAGE_LABEL_LICENSES: Apache-2.0
-  DOCKERFILE: DOCKERFILE-build-broadsea-hades
+  DOCKERFILE: Dockerfile-build-broadsea-hades
   
   GITHUB_PAT: ${{ secrets.GH_TOKEN }}
   
