@@ -36,9 +36,6 @@ jobs:
         if: ${{ env.R_PACKAGE_VERSION != '' }}
         run: |
           echo "${{ env.R_PACKAGE_VERSION }}"
-  
-#      - name: Checkout GitHub repo code
-#        uses: actions/checkout@v3
                    
       - name: Set up Docker build environment
         uses: docker/setup-qemu-action@v1
