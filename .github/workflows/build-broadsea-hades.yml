@@ -9,10 +9,10 @@ env:
   
   SOURCE_REPO: OHDSI/HADES
   BUILD_CONTEXT_DIRECTORY: build-broadsea-hades
-  
   DOCKER_IMAGE_REPO_NAME: levansltscomputingllc/broadsea-hades
-  DOCKER_IMAGE_LABEL_URL: https://github.com/OHDSI/Broadsea-methodslibrary/build-broadsea-hades
   DOCKER_IMAGE_LABEL_DESCRIPTION: RStudio Server with OHDSI HADES R packages
+  
+  DOCKER_IMAGE_LABEL_URL: https://github.com/OHDSI/Broadsea-methodslibrary/${{ BUILD_CONTEXT_DIRECTORY }}
   DOCKER_IMAGE_LABEL_MAINTAINER: Lee Evans - evans@ohdsi.org
   DOCKER_IMAGE_LABEL_AUTHORS: OHDSI Community
   DOCKER_IMAGE_LABEL_VENDOR: OHDSI Community
