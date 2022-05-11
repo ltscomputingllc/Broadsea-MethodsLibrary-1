@@ -7,7 +7,6 @@ on:
 
 env:
   
-#  DOCKER_IMAGE_REPO_NAME: OHDSI/broadsea-methodslibrary
   DOCKER_IMAGE_REPO_NAME: levansltscomputingllc/broadsea-hades
   DOCKER_IMAGE_LABEL_URL: https://github.com/OHDSI/Broadsea-methodslibrary
   DOCKER_IMAGE_LABEL_DESCRIPTION: RStudio Server with OHDSI HADES R packages
@@ -29,7 +28,6 @@ jobs:
       - name: Get source repo R package version number from DESCRIPTION file
         run: |
           echo "R_PACKAGE_VERSION="$(curl -s -S $GITHUB_API_URL/repos/OHDSI/HADES/contents/DESCRIPTION | jq -r ".content" | base64 --decode | grep Version| cut -d' ' -f2) >> $GITHUB_ENV
-#          echo "R_PACKAGE_VERSION="$(curl -s -S https://api.github.com/repos/OHDSI/HADES/contents/DESCRIPTION | jq -r ".content" | base64 --decode | grep Version| cut -d' ' -f2) >> $GITHUB_ENV
 
       - name: Display R package version number
         if: ${{ env.R_PACKAGE_VERSION != '' }}
