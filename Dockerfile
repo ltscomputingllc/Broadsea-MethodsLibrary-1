@@ -20,9 +20,8 @@ RUN install2.r \
 	remotes \
 && rm -rf /tmp/download_packages/ /tmp/*.rds
 
-# install OHDSI R packages that are not part of HADES
+# install OHDSI HADES R packages
 RUN R -e "remotes::install_github(repo = 'OHDSI/Hades', upgrade = 'always')"
-RUN R -e "remotes::install_github(repo = 'OHDSI/DataQualityDashboard', upgrade = 'always')"
 
 # install jdbc drivers for database access using OHDSI DatabaseConnector
 RUN R <<EOF
@@ -33,9 +32,6 @@ downloadJdbcDrivers('sql server');
 downloadJdbcDrivers('oracle');
 downloadJdbcDrivers('spark');
 EOF
-
-# install OHDSI Achilles R package
-RUN R -e "remotes::install_github(repo = 'OHDSI/Achilles', upgrade = 'always')"
 
 RUN cp /tmp/Renviron /usr/local/lib/R/etc/Renviron
 
