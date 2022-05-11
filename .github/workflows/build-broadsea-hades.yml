@@ -1,6 +1,6 @@
 # Build ohdsi/broadsea-hades Docker container
 
-name: CI
+name: build-broadsea-hades
 
 on:
   workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
