@@ -30,7 +30,7 @@ jobs:
   
       - name: Get source repo latest commit SHA
         run: |
-          echo "SOURCE_LATEST_COMMIT_SHA="$(curl -s -S $GITHUB_API_URL/repos/${{ env.GITHUB_SOURCE_REPO }}/commits | jq -r ".[0].sha" >> $GITHUB_ENV
+          echo "SOURCE_LATEST_COMMIT_SHA="$(curl -s -S $GITHUB_API_URL/repos/${{ env.GITHUB_SOURCE_REPO }}/commits | jq -r ".[0].sha") >> $GITHUB_ENV
 
       - name: Display source repo latest commit SHA
         if: ${{ env.SOURCE_LATEST_COMMIT_SHA != '' }}
