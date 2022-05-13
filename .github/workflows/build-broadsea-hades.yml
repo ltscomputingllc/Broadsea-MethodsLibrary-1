@@ -62,7 +62,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /tmp/${{ env.BUILD_CONTEXT_DIRECTORY }}/.buildx-cache
-          key: ${{ runner.os }}-${{ env.BUILD_CONTEXT_DIRECTORY }}-buildx-${{ env.SOURCE_LATEST_COMMIT_SHA }}
+          key: ${{ runner.os }}-${{ env.BUILD_CONTEXT_DIRECTORY }}-buildx-${{ env.SOURCE_LATEST_COMMIT_SHA }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-${{ env.BUILD_CONTEXT_DIRECTORY }}-buildx-
             
